@@ -9,7 +9,9 @@ import TextInputWrapper from '../TextInputWrapper';
 import Black from '../Black';
 import OptionsEditor from './OptionsEditor';
 
-const FeatureEditorView = styled.section``;
+const FeatureEditorView = styled.section`
+outline: none !important;
+`;
 
 export default class FeatureEditor extends PureComponent {
   constructor(p) {
@@ -62,7 +64,7 @@ export default class FeatureEditor extends PureComponent {
                 </TableCell>
                 <TableCell verticalAlign="top" border="bottom">
                   <Box pad="2">
-                    <Button pad="small" color="status-critical" plain={false} onClick={() => this.stream.do.deleteFeature(feature.uid)}>
+                    <Button size="small" pad="small" color="status-critical" plain={false} onClick={() => this.stream.do.deleteFeature(feature.uid)}>
                       <Box gap="medium" direction="row">
                         <Black>&times;</Black>
                         <Text>Delete Feature</Text>
@@ -75,7 +77,7 @@ export default class FeatureEditor extends PureComponent {
           </TableBody>
         </Table>
         <Box pad="medium" align="end" fill="horizontal">
-          <Button fill={false} onClick={this.stream.do.addFeature} plain={false}><span>Add a Feature</span></Button>
+          <Button size="small" fill={false} onClick={this.stream.do.addFeature} plain={false}><span>Add a Feature</span></Button>
         </Box>
       </FeatureEditorView>
     );

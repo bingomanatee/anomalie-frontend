@@ -7,6 +7,8 @@ import Navigation from '../Navigation';
 
 export default class SiteHeader extends PureComponent {
   render() {
+    const { history } = this.props;
+
     return (
       <Box
         direction="row"
@@ -19,7 +21,17 @@ export default class SiteHeader extends PureComponent {
         justify="between"
         elevation="medium"
       >
-        <Box basis="300px" direction="row" className="logo" align="start" gap="small">
+        <Box
+          focusIndicator={false}
+          basis="300px"
+          direction="row"
+          className="logo"
+          align="start"
+          gap="small"
+          className="no-outline"
+
+          onClick={() => history.push('/')}
+        >
           <img src="/img/logo.svg" />
           <Heading
             as="div"

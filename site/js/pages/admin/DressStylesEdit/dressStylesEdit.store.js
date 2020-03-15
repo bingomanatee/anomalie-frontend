@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { ValueStream } from '@wonderlandlabs/looking-glass-engine';
 import axios from 'axios';
 import _ from 'lodash';
@@ -29,8 +30,17 @@ export default (props) => {
     .method('save', (s, event) => {
       const value = _.get(event, 'value');
       if (!value) return;
-      console.log('saving --- ', value);
-      axios.put(API_ROOT + id, { dress_type: value })
+      const dressType = { ...value };
+      console.log('saving (pre):', dressType);
+      if (dressType.dress_type_bad_combos) {
+        dressType.blockers = value.dress_type_bad_combos;
+        delete dressType.dress_type_bad_combos;
+      } else {
+        console.log('dress type has blockers???');
+      }
+
+      console.log('saving --- ', dressType);
+      axios.put(API_ROOT + id, { dress_type: dressType })
         .then(() => history.push('/admin/dress-styles'))
         .catch((err) => {
           console.log('save error:', err);
@@ -45,6 +55,14 @@ export default (props) => {
       if (Array.isArray(features)) {
         s.my.dressType.features = features;
         s.do.setDressType(s.my.dressType);
+      }
+    })
+    .method('blockersChanged', (s, data) => {
+      const dress_type_bad_combos = _.get(data, 'target.value');
+      console.log('blockers changed: ', dress_type_bad_combos);
+      if (_.isObject(dress_type_bad_combos)) {
+        s.do.setDressType({ ...s.my.dressType, dress_type_bad_combos });
+        console.log('dress type is now', s.my.dressType);
       }
     })
     .method('load', (s) => {

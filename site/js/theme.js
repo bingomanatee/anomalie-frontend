@@ -240,14 +240,14 @@ export default {
   button: {
     border: {
       width: '1px',
-      radius: '18px',
+      radius: '6px',
     },
     color: 'brand',
     primary: {
       color: 'brand',
       padding: {
-        vertical: '4px',
-        horizontal: '22px',
+        vertical: '1rem',
+        horizontal: '2rem',
       },
     },
     disabled: {
@@ -256,11 +256,24 @@ export default {
     minWidth: '96px',
     maxWidth: '384px',
     padding: {
-      vertical: '4px',
-      horizontal: '22px',
+      vertical: '1rem',
+      horizontal: '2rem',
     },
     extend: {
       whiteSpace: 'nowrap',
+      textTransform: 'uppercase',
+      outline: 'none',
+    },
+    size: {
+      small: {
+        border: {
+          radius: '2px',
+        },
+        pad: {
+          horizontal: '6px',
+          vertical: '3px',
+        },
+      },
     },
   },
   calendar: {
@@ -784,7 +797,7 @@ export default {
         horizontal: 'small',
         vertical: 'xsmall',
       },
-      extend: 'outline: none !important'
+      extend: 'outline: none !important',
     },
     footer: {
       align: 'start',

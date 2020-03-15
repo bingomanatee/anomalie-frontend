@@ -44,14 +44,14 @@ export default class OptionsEditor extends PureComponent {
                   <Box pad="2"><TextInputWrapper key="value" value={option.name} pad={2} onChange={(value) => this.stream.do.updateOption(option, value)} /></Box>
                 </TableCell>
                 <TableCell plain>
-                  <Button pad="small" color="status-critical" plain icon={<Black>&times;</Black>} onClick={() => this.stream.do.deleteOption(option.uid)} />
+                  <Button size="small" pad="small" color="status-critical" plain icon={<Black>&times;</Black>} onClick={() => this.stream.do.deleteOption(option.uid)} />
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
         <Box>
-          <Button plain onClick={this.stream.do.addOption} plain={false}>
+          <Button size="small" plain onClick={this.stream.do.addOption} plain={false}>
             <Black><Text color="brand">+</Text></Black>
             {' Add Option'}
           </Button>

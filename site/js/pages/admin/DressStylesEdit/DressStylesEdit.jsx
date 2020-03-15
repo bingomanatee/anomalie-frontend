@@ -7,9 +7,9 @@ import styled from 'styled-components';
 import React, { Component } from 'react';
 import dressTypesStore from './dressStylesEdit.store';
 import PageFrame from '../../../views/PageFrame';
-import TabWrapper from '../../../views/TabWrapper';
 import FormGrid from '../../../views/FormGrid';
 import FeatureEditor from '../../../views/FeatureEditor/FeatureEditor';
+import BlockerEditor from '../../../views/BlockerEditor';
 import Black from '../../../views/Black';
 
 const dlfNames = (features) => _(features).map('name').uniq().sortBy()
@@ -50,12 +50,14 @@ export default class DressStylesEdit extends Component {
       dressType,
     } = this.state;
     const { history } = this.props;
-    if (!dressType) return '';
+    if (!dressType) {
+      return '';
+    }
 
     return (
       <PageFrame>
         <Heading>
-          <Link to={'/admin/dress-styles'}>Dress Styles</Link>
+          <Link to="/admin/dress-styles">Dress Styles</Link>
           :
           {` "${_.get(dressType, 'name', '...')}"`}
         </Heading>
@@ -72,10 +74,23 @@ export default class DressStylesEdit extends Component {
             </Box>
 
             <Text>Features</Text>
-            <FormField value={dressType} onChange={this.stream.do.featureChanged} component={FeatureEditor} name="features" />
+            <FormField
+              value={dressType}
+              onChange={this.stream.do.featureChanged}
+              component={FeatureEditor}
+              name="features"
+            />
+            <Text>Blockers</Text>
+            <FormField
+              value={dressType}
+              onChange={this.stream.do.blockersChanged}
+              component={BlockerEditor}
+              name="dress_type_bad_combos"
+            />
 
             <span>&nbsp;</span>
-            <Button primary plain={false} type="submit">
+            <Button
+              focusIndicator={false}primary plain={false} type="submit">
               <Black color="white">
                 Save Dress Style
               </Black>
