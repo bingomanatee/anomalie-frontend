@@ -5,32 +5,38 @@ import uuid from 'uuid/v1';
 
 export default function blockerEditorStream(props) {
   const { value, onChange } = props;
-  const dtbcs = (value.dress_type_bad_combos || [])
-    .map((bc) => ({ uid: uuid(), ...bc }));
 
-  console.log('initializing dtbs as ', dtbcs);
+  console.log('new beStream, value = ', value);
 
-  return new ValueStream('blockerEditor')
-    .property('dress_type_bad_combos', dtbcs, 'array')
-    .property('dressType', value || {}, 'object')
-    .watchFlat('dress_type_bad_combos', (s, dress_type_bad_combos) => {
-      onChange({ target: { value: dress_type_bad_combos } });
-    })
-    .method('updateBlocker', (s, uid, blocker) => {
-      s.do.setDress_type_bad_combos(s.my.dress_type_bad_combos.map((b) => {
-        if (b.uid === uid || (blocker.id && (blocker.id === b.id))) {
-          return blocker;
-        }
-        return b;
-      }));
-    })
-    .method('deleteBlocker', (s, uid) => {
-      s.do.setDress_type_bad_combos(s.my.dress_type_bad_combos.filter((v) => v.uid !== uid));
-    })
-    .method('addBlocker', (s) => {
+  return new ValueStream('featureEditor')
+    .method('addCombo', (s) => {
       s.do.setDress_type_bad_combos([...s.my.dress_type_bad_combos, {
-        uid: uuid(),
-        combination: {},
+        id: uuid(),
+        combination: '[{"property": "value"}, {"property": "value"}]',
+        invalid: false,
       }]);
+    })
+    .method('deleteRow', (s, removeId) => {
+      s.do.setDress_type_bad_combos(s.my.dress_type_bad_combos.filter(({ id }) => id !== removeId));
+    })
+    .method('updateRecordCombination', (s, id, combination) => {
+      const record = _.find(s.my.dress_type_bad_combos, { id });
+      if (record) {
+        console.log('updating combination ', combination);
+        record.combination = combination;
+        try {
+          JSON.parse(combination);
+          record.invaid = false;
+        } catch (err) {
+          record.invalid = true;
+        }
+        s.do.setDress_type_bad_combos([...s.my.dress_type_bad_combos]);
+      } else {
+        console.log('cannot find record id:', id);
+      }
+    })
+    .property('dress_type_bad_combos', value || [], 'array')
+    .watchFlat('dress_type_bad_combos', (s, value) => {
+      onChange({ target: { value } });
     });
 }

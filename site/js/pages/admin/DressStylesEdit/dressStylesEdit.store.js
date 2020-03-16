@@ -2,77 +2,78 @@
 import { ValueStream } from '@wonderlandlabs/looking-glass-engine';
 import axios from 'axios';
 import _ from 'lodash';
-import uuid from 'uuid/v1';
+import combineFeatures from '../../../utils/combineFeatures';
 
 const API_ROOT = 'http://localhost:3000/dress_types/';
-
-const combineFeatures = (features) => {
-  const list = _.groupBy(features, 'name');
-  Object.keys(list).forEach((key) => {
-    list[key] = _(list[key]).map('value').sortBy().value();
-  });
-  return _.reduce(list, (out, options, name) => [...out, {
-    uid: uuid(),
-    name,
-    options: options.map((name) => ({
-      name,
-      uid: uuid(),
-    })),
-  }], []);
-};
 
 export default (props) => {
   const id = _.get(props, 'match.params.id', 0);
   const { history } = props;
   const dressTypes = new ValueStream('dressStylesEdit')
+    .property('name', '', 'string')
+    .property('features', [], 'array')
+    .property('blockers', [], 'array')
+    .property('dress_type_bad_combos', [], 'array')
+    .watchFlat('dress_type_bad_combos', (s, combos) => {
+      combos.forEach((c) => {
+        if (!_.isString(c.combination)) {
+          c.combination = JSON.stringify(c.combination, true, 2);
+        }
+      });
+    })
+    .property('dress_type_features', [], 'array')
+    .property('id', id, 'integer')
     .property('dressType', null)
-    .property('id', id)
+    .method('updateDressType', (s) => {
+      const dressType = {
+        id: s.my.id,
+        features: s.my.features,
+        blockers: s.my.blockers,
+        dress_type_features: s.my.dress_type_features,
+        dress_type_bad_combos: s.my.dress_type_bad_combos,
+        name: s.my.name,
+      };
+      s.do.setDressType(dressType);
+    })
     .method('save', (s, event) => {
-      const value = _.get(event, 'value');
-      if (!value) return;
-      const dressType = { ...value };
-      console.log('saving (pre):', dressType);
-      if (dressType.dress_type_bad_combos) {
-        dressType.blockers = value.dress_type_bad_combos;
-        delete dressType.dress_type_bad_combos;
-      } else {
-        console.log('dress type has blockers???');
-      }
-
-      console.log('saving --- ', dressType);
-      axios.put(API_ROOT + id, { dress_type: dressType })
+      const dress_type = _.get(event, 'value');
+      dress_type.features = combineFeatures(dress_type.dress_type_features);
+      dress_type.blockers = [...dress_type.dress_type_bad_combos];
+      console.log('----------- SAVING', dress_type);
+      axios.put(API_ROOT + id, { dress_type })
         .then(() => history.push('/admin/dress-styles'))
         .catch((err) => {
           console.log('save error:', err);
           s.do.load();
         });
     })
-    .method('update', (s, value) => {
-      Object.assign(s.my.dressType, value);
-    })
-    .method('featureChanged', (s, data) => {
-      const features = _.get(data, 'target.value');
-      if (Array.isArray(features)) {
-        s.my.dressType.features = features;
-        s.do.setDressType(s.my.dressType);
+    .method('update', (s, dressType) => {
+      const { name, dress_type_bad_combos, dress_type_features } = dressType;
+      if (s.my.name !== name) {
+        s.do.setName(name);
+      }
+      if (!_.eq(s.my.dress_type_bad_combos, dress_type_bad_combos)) {
+        s.do.setDress_type_bad_combos(dress_type_bad_combos);
+      }
+      if (!_.eq(s.my.dress_type_features !== dress_type_features)) {
+        s.do.setDress_type_features(dress_type_features);
       }
     })
-    .method('blockersChanged', (s, data) => {
-      const dress_type_bad_combos = _.get(data, 'target.value');
-      console.log('blockers changed: ', dress_type_bad_combos);
-      if (_.isObject(dress_type_bad_combos)) {
-        s.do.setDressType({ ...s.my.dressType, dress_type_bad_combos });
-        console.log('dress type is now', s.my.dressType);
-      }
-    })
+    .property('loaded', false, 'boolean')
+    .method('readData', (s, dressType) => {
+      const { name, dress_type_bad_combos, dress_type_features } = dressType;
+
+      s.do.setName(name);
+      s.do.setDress_type_bad_combos(dress_type_bad_combos || []);
+      s.do.setDress_type_features(dress_type_features || []);
+    }, true)
     .method('load', (s) => {
       axios.get(API_ROOT + id)
         .then(({ data }) => {
-          if (data.dress_type_features) {
-            data.features = combineFeatures(data.dress_type_features);
-            delete data.dress_type_features;
-          }
-          s.do.setDressType(data);
+          console.log('loaded ----', data);
+          s.do.readData(data);
+          s.do.updateDressType();
+          s.do.setLoaded(true);
         })
         .catch((err) => {
           console.log('dress types load error: ', err);

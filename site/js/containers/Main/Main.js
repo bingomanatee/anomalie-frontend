@@ -15,16 +15,13 @@ import theme from '../../theme';
 import Home from '../../pages/Home';
 import DressStyles from '../../pages/admin/DressStyles';
 import DressStylesEdit from '../../pages/admin/DressStylesEdit/DressStylesEdit';
-
-const Loading = () => (
-  <Box margin="large" align="center" justify="center">
-    <Text size="large" textAlign="center"><Black>Loading user identity, please wait</Black></Text>
-  </Box>
-);
+import DressDashboard from '../../pages/DressDashboard';
+import DesignADress from '../../pages/DesignADress';
+import NotLoggedIn from '../../pages/NotLoggedIn/NotLoggedIn';
 
 export default () => {
   const {
-    user, isAuthenticated, loginWithRedirect, logout, loading,
+    isAuthenticated,
   } = useAuth0();
 
   return (
@@ -36,18 +33,19 @@ export default () => {
           </Box>
           <Box gridArea="main">
             <Content>
-
               <Switch>
-                <Route path="/" exact component={Home} />
+                <Route path="/not-logged-in" component={NotLoggedIn} />
                 {
-                  isAuthenticated ? [
+                  (true || isAuthenticated) ? [
                     <Route path="/admin/dress-styles" exact component={DressStyles} />,
                     <Route path="/admin/dress-styles/:id" component={DressStylesEdit} />,
                   ] : ''
                 }
+                <Route path="/my-dress-dashboard" component={DressDashboard} />
+                <Route path="/design-a-dress" component={DesignADress} />
+                <Route path="/" exact component={Home} />
                 <Route component={Home} />
               </Switch>
-
             </Content>
           </Box>
         </MainGrid>

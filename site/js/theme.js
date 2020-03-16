@@ -59,7 +59,7 @@ export default {
       'status-unknown': '#CCCCCC',
       'status-disabled': '#CCCCCC',
       background: '#ffffff',
-      'form-background': '#FFC7D3',
+      dashboard: '#FFC7D3',
     },
     animation: {
       duration: '1s',
@@ -242,12 +242,14 @@ export default {
       width: '1px',
       radius: '6px',
     },
-    color: 'brand',
     primary: {
       color: 'brand',
       padding: {
         vertical: '1rem',
         horizontal: '2rem',
+      },
+      extend: {
+        color: 'white', fontFamily: 'Anomalie Sans Black',
       },
     },
     disabled: {

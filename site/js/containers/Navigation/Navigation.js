@@ -23,7 +23,17 @@ export default ({ history }) => {
       >
         <Text margin="medium">Home</Text>
       </Button>
-      {isAuthenticated ? (
+      {isAuthenticated ? [
+        <Button
+          focusIndicator={false}
+          plain
+          onClick={(e) => {
+            history.push('/my-dress-dashboard');
+          }}
+        >
+          <Text pad="medium">Dashboard</Text>
+        </Button>,
+        (
         <Button
           focusIndicator={false}
           plain
@@ -34,7 +44,7 @@ export default ({ history }) => {
         >
           <Box pad="medium" style={{ textTransform: 'uppercase' }}>Dress Styles</Box>
         </Button>
-      ) : ''}
+      )] : ''}
       <Button
         plain
         focusIndicator={false}

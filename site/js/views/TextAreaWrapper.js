@@ -7,12 +7,12 @@ export default (props) => {
   const [inputValue, setInputValue] = useState(value);
   useEffect(() => {
     if (onChange && (typeof onChange === 'function')) {
+      console.log('text area change:', inputValue);
       onChange(inputValue);
     }
   }, [inputValue]);
   return (
     <TextArea
-      {...props}
       value={inputValue}
       onChange={
         (e) => {

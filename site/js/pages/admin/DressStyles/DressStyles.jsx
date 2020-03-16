@@ -190,16 +190,10 @@ export default class DressStyles extends Component {
               >
                 <Heading level={2}>Create a Dress Style</Heading>
                 <FormGrid>
-
                   <Text>Name</Text>
                   <Box>
                     <FormField required name="name" />
                   </Box>
-
-                  <Text>Features</Text>
-                  <FormField value={newDressType} onChange={this.stream.do.featureChanged} component={FeatureEditor} name="features" />
-
-                  <span>&nbsp;</span>
                   <Button
                     focusIndicator={false}
                     primary

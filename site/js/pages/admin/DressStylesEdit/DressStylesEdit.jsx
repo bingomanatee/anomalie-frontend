@@ -47,57 +47,80 @@ export default class DressStylesEdit extends Component {
 
   render() {
     const {
-      dressType,
+      loaded,
+      name,
     } = this.state;
-    const { history } = this.props;
-    if (!dressType) {
-      return '';
-    }
 
     return (
       <PageFrame>
         <Heading>
           <Link to="/admin/dress-styles">Dress Styles</Link>
           :
-          {` "${_.get(dressType, 'name', '...')}"`}
+          {loaded ? name || 'unnamed' : '...'}
         </Heading>
-        <Form
-          value={dressType}
-          onSubmit={this.stream.do.save}
-          onChange={this.stream.do.update}
-        >
-          <FormGrid>
+        {
+          loaded ? (
+            <Form
+              value={this.stream.my.dressType}
+              onSubmit={this.stream.do.save}
+              onChange={this.stream.do.update}
+            >
+              <FormGrid>
+                <Text>Name</Text>
+                <Box>
+                  <FormField required name="name" />
+                </Box>
 
-            <Text>Name</Text>
-            <Box>
-              <FormField required name="name" />
-            </Box>
+                <Text>Features</Text>
+                <FormField
+                  component={FeatureEditor}
+                  name="dress_type_features"
+                />
 
-            <Text>Features</Text>
-            <FormField
-              value={dressType}
-              onChange={this.stream.do.featureChanged}
-              component={FeatureEditor}
-              name="features"
-            />
-            <Text>Blockers</Text>
-            <FormField
-              value={dressType}
-              onChange={this.stream.do.blockersChanged}
-              component={BlockerEditor}
-              name="dress_type_bad_combos"
-            />
+                <Text>Prohibited Combinations</Text>
+                <FormField
+                  component={BlockerEditor}
+                  name="dress_type_bad_combos"
+                />
 
-            <span>&nbsp;</span>
-            <Button
-              focusIndicator={false}primary plain={false} type="submit">
-              <Black color="white">
-                Save Dress Style
-              </Black>
-            </Button>
-          </FormGrid>
-        </Form>
+                <span>&nbsp;</span>
+                <Button
+                  focusIndicator={false}
+                  primary
+                  plain={false}
+                  type="submit"
+                >
+                  <Black color="white">
+                    Save Dress Style
+                  </Black>
+                </Button>
+              </FormGrid>
+              <code>
+                <pre>
+                  {JSON.stringify(this.stream.my.dressType)}
+                </pre>
+              </code>
+            </Form>
+          ) : <div>Loading...</div>
+        }
       </PageFrame>
     );
   }
 }
+
+/**
+ *
+ *
+ <Text>Features</Text>
+ <FormField
+ component={BlockerEditor}
+ name="dress_type_features"
+ />
+
+ *
+ <Text>Blockers</Text>
+ <FormField
+ component={BlockerEditor}
+ name="dress_type_bad_combos"
+ />
+ * */

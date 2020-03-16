@@ -4,8 +4,8 @@ import {
 } from 'grommet';
 import _ from 'lodash';
 import styled from 'styled-components';
-import featureEditorStream from './featureEditor.stream';
-import TextInputWrapper from '../TextInputWrapper';
+import blockerEditorStream from './blockerEditor.stream';
+import TextAreaWrapper from '../TextAreaWrapper';
 import Black from '../Black';
 
 const FeatureEditorView = styled.section`
@@ -14,32 +14,42 @@ const FeatureEditorView = styled.section`
 const dataGridColumns = (stream) => [
   { property: 'id', header: 'ID', primary: true },
   {
-    property: 'name',
-    header: 'Name',
-    sortable: true,
-    render: ({ name, value, id }) => (
-      <TextInputWrapper
-        value={name}
-        onChange={(name) => stream.do.updateRecordName(id, name)}
+    property: 'combination',
+    header: 'Combination',
+    width: '50%',
+    render: ({ combination, id }) => (
+      <TextAreaWrapper
+        value={combination}
+        onChange={(value) => stream.do.updateRecordCombination(id, value)}
       />
     ),
   },
   {
-    property: 'value',
-    header: 'Value',
-    sortable: true,
-    render: ({ name, value, id }) => (
-      <TextInputWrapper
-        value={value}
-        onChange={(value) => stream.do.updateRecordValue(id, value)}
-      />
+    property: 'invalid',
+    header: 'Valid',
+    render: ({ invalid }) => {
+      if (!invalid) {
+        return <Text color="status-ok">Valid JSON</Text>;
+      }
+      return <Text color="status-danger">Invalid JSON</Text>;
+    },
+  },
+  {
+    property: 'delete',
+    render: ({ id }) => (
+      <Box justify="center">
+        <Button fill={false} size="small" plain={false} onClick={() => stream.do.deleteRow(id)}>
+          <Black color="red">&times;</Black>
+          Delete
+        </Button>
+      </Box>
     ),
   },
 ];
-export default class FeatureEditor extends PureComponent {
+export default class BlockerEditor extends PureComponent {
   constructor(p) {
     super(p);
-    const stream = featureEditorStream(p);
+    const stream = blockerEditorStream(p);
     this.stream = stream;
     this.state = { ...stream.value };
   }
@@ -59,15 +69,15 @@ export default class FeatureEditor extends PureComponent {
   }
 
   render() {
-    const { dress_type_features } = this.state;
+    const { dress_type_bad_combos } = this.state;
     return (
       <FeatureEditorView>
 
         <Box gap="medium" justify="center" fill="horizontal" margin="small" align="center">
-          <DataTable sortable data={dress_type_features} columns={dataGridColumns(this.stream)} />
-          <Button size="small" plain={false} fill={false} focusIndicator={false} onClick={this.stream.do.addFeature}>
+          <DataTable sortable data={dress_type_bad_combos} columns={dataGridColumns(this.stream)} />
+          <Button size="small" plain={false} fill={false} focusIndicator={false} onClick={this.stream.do.addCombo}>
             <Black><Text color="brand">+</Text></Black>
-            Add Combination
+            Add Prohibition
           </Button>
         </Box>
 
