@@ -71,6 +71,11 @@ export default class DressStylesEdit extends Component {
                   <FormField required name="name" />
                 </Box>
 
+                <Text>Image</Text>
+                <Box>
+                  <FormField required name="image" />
+                </Box>
+
                 <Text>Features</Text>
                 <FormField
                   component={FeatureEditor}

@@ -8,7 +8,7 @@ import { useAuth0 } from '../../react-auth0-spa';
 
 export default ({ history }) => {
   const {
-    user, isAuthenticated, loginWithRedirect, loading, getIdTokenClaims,
+    loginWithPopup,
   } = useAuth0();
   return (
     <PageFrame dashboard>
@@ -21,7 +21,7 @@ export default ({ history }) => {
             margin="medium"
             primary
             plain={false}
-            onClick={loginWithRedirect}
+            onClick={loginWithPopup}
           >
             <Text color="white">Log In</Text>
           </Button>

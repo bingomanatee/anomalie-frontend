@@ -4,16 +4,7 @@
 .no-outline,*, *:active, *:focus, button, button:focus, button:active {
   outline: none !important;
   outline-color: rgba(0,0,0,0) !important;
-  cursor: default !important;
   tab-index: -1 !important;
-}
-
-button, button > *, .no_outline {
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE10+/Edge */
-  user-select: none; /* Standard */
-  -webkit-appearance: none;
 }
 
 /*! HTML5 Boilerplate v7.2.0 | MIT License | https://html5boilerplate.com/ */

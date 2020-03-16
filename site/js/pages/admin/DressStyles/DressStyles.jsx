@@ -43,9 +43,18 @@ const tableColumns = (history) => [
         <Text className="table-header">Name</Text>
       </Box>
     ),
-    render: (dressType) => (
+  },
+  {
+    property: 'image',
+    sortable: true,
+    header: (
       <Box width="20rem">
-        {dressType.name}
+        <Text className="table-header">Image</Text>
+      </Box>
+    ),
+    render: (dressType) => (
+      <Box width="30rem">
+        {dressType.image}
       </Box>
     ),
   },
@@ -182,18 +191,23 @@ export default class DressStyles extends Component {
             className="no-outline"
             title="Add a Dress Style"
           >
-            <TabWrapper>
-              <Form
-                value={newDressType}
-                onSubmit={this.stream.do.saveNewDressType}
-                onChange={this.stream.do.updateNewDressType}
-              >
+            <Form
+              value={newDressType}
+              onSubmit={this.stream.do.saveNewDressType}
+              onChange={this.stream.do.updateNewDressType}
+            >
+              <TabWrapper>
                 <Heading level={2}>Create a Dress Style</Heading>
                 <FormGrid>
                   <Text>Name</Text>
                   <Box>
                     <FormField required name="name" />
                   </Box>
+                  <Text>Image</Text>
+                  <Box>
+                    <FormField required name="image" />
+                  </Box>
+                  <span>&nbsp;</span>
                   <Button
                     focusIndicator={false}
                     primary
@@ -205,13 +219,8 @@ export default class DressStyles extends Component {
                     </Black>
                   </Button>
                 </FormGrid>
-                <code>
-                  <pre>
-                    {JSON.stringify(newDressType, true, 2)}
-                  </pre>
-                </code>
-              </Form>
-            </TabWrapper>
+              </TabWrapper>
+            </Form>
           </Tab>
         </Tabs>
       </PageFrame>

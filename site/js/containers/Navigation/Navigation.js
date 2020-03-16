@@ -8,7 +8,7 @@ import { useAuth0 } from '../../react-auth0-spa';
 
 export default ({ history }) => {
   const {
-    user, isAuthenticated, loginWithRedirect, logout,
+    user, isAuthenticated, loginWithPopup, logout,
   } = useAuth0();
 
   return (
@@ -55,7 +55,7 @@ export default ({ history }) => {
               returnTo: window.location.origin,
             });
           } else {
-            loginWithRedirect();
+            loginWithPopup();
           }
         }}
       >

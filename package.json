@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development ./node_modules/.bin/parcel site/index.html",
-    "build": "./node_modules/bin/parcel build site/index.html",
+    "prod": "NODE_ENV=production ./node_modules/.bin/parcel site/index.html",
+    "build": "./node_modules/.bin/parcel build site/index.html",
     "test": "NODE_ENV=test jest"
   },
   "staticFiles": {
@@ -23,6 +24,7 @@
     "chroma-js": "^2.0.6",
     "grommet": "^2.11.2",
     "grommet-icons": "^4.3.0",
+    "local-storage": "^2.0.0",
     "lodash": "^4.17.15",
     "parcel-bundler": "^1.12.3",
     "react": "^16.10.1",

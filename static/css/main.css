@@ -6,6 +6,12 @@ div, p {
   font-family: "Anomalie Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+h2 {
+  font-family: "Times", serif;
+  font-size: 2.5rem !important;
+  font-weight: 400 !important;
+}
+
 .panel-label {
   border-bottom: 1px solid black;
   font-weight: bold;
@@ -21,20 +27,7 @@ div, p {
 .no-outline, *, *:active, *:focus, button, button:focus, button:active {
   outline: none !important;
   outline-color: rgba(0, 0, 0, 0) !important;
-  cursor: default !important;
   tab-index: -1 !important;
-}
-
-button, button > *, .no_outline {
-  -webkit-user-select: none;
-  /* Safari */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* IE10+/Edge */
-  user-select: none;
-  /* Standard */
-  -webkit-appearance: none;
 }
 
 /*! HTML5 Boilerplate v7.2.0 | MIT License | https://html5boilerplate.com/ */

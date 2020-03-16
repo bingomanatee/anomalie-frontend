@@ -12,7 +12,7 @@ export default function blockerEditorStream(props) {
     .method('addCombo', (s) => {
       s.do.setDress_type_bad_combos([...s.my.dress_type_bad_combos, {
         id: uuid(),
-        combination: '[{"property": "value"}, {"property": "value"}]',
+        combination: '{"property": "value", "property2": "value2"}',
         invalid: false,
       }]);
     })

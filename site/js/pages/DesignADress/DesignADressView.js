@@ -12,7 +12,7 @@ import ChooseDressOptions from './ChooseDressOptions';
 import combineFeatures from '../../utils/combineFeatures';
 
 export default ({
-  history, dressTypesLoaded, dressTypes, stream, dressTypeID,
+  history, dressTypesLoaded, dressType, features, stream, dressTypeID,
 }) => {
   const {
     user, isAuthenticated, loading, getIdTokenClaims,
@@ -43,13 +43,12 @@ export default ({
     });
   }
 
-  const dressType = stream.do.dressType();
   return (
     <PageFrame dashboard>
       <Heading textAlign="center">Design a Dress</Heading>
       {!dressTypeID ? <ChooseDressType stream={stream} /> : (
         <Box direction="column">
-          <Box fill="horizontal" justify="between" direction="row">
+          <Box fill="horizontal" justify="between" direction="row" align="baseline">
             <Heading level={2}>
               {' '}
               Dress Style: &quot;
@@ -57,9 +56,16 @@ export default ({
               &quot;
             </Heading>
 
-            <Button size="small" onClick={stream.do.changeDressType}>Change</Button>
+            <div>
+              <Button plain={false} size="small" color="black" focusIndicator={false} onClick={stream.do.changeDressType}>Change</Button>
+            </div>
           </Box>
-          <ChooseDressOptions features={combineFeatures(dressType.dress_type_features)} stream={stream} />
+          <ChooseDressOptions features={features} stream={stream} />
+          {stream.my.valid && stream.do.featuresComplete() ? (
+            <Button primary plain={false} onClick={stream.do.saveDressChoice}>
+              <Black color="white">Save Dress Choice</Black>
+            </Button>
+          ) : ''}
         </Box>
       )}
     </PageFrame>

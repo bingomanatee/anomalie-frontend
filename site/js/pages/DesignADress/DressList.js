@@ -16,6 +16,7 @@ export default ({ stream, dresses, dressesLoaded }) => {
               {(dress) => (
                 <Box pad="medium">
                   <Black>{dress.dress_type.name}</Black>
+
                 </Box>
               )}
             </List>
